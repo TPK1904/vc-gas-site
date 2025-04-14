@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VC GAS - Produtos por Marca</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #ff6600;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 30px;
+      gap: 20px;
+    }
+    .product-card {
+      background-color: #1e1e1e;
+      color: white;
+      border-radius: 10px;
+      width: 250px;
+      padding: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .product-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: contain;
+      border-radius: 5px;
+      background: white;
+    }
+    .product-card h3 {
+      font-size: 18px;
+      margin: 10px 0 5px;
+    }
+    .product-card p {
+      font-size: 14px;
+      margin: 5px 0;
+    }
+    .price {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ff6600;
+      margin: 10px 0;
+    }
+    .stock {
+      color: #00cc66;
+      font-weight: bold;
+    }
+    .tag {
+      background-color: #007bff;
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .buy-button {
+      background-color: #ff6600;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: background-color 0.2s;
+    }
+    .buy-button:hover {
+      background-color: #cc5200;
+    }
+    .buy-button:disabled {
+      background-color: gray;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>VC GAS</h1>
+    <p id="marca-title">Produtos da Marca</p>
+  </header>
+
+  <div class="container" id="product-container"></div>
+
+  <script>
+    const produtos = {
+  cepsa: [
+    { nome: "Gás Butano 12,50kg", preco: "32,50 €", descricao: "Butano CEPSA 12,5kg.", imagem: "cepsa-gas-butano.jpg", stock: true },
+    { nome: "Gás Propano 11kg", preco: "32,50 €", descricao: "Propano CEPSA 11kg.", imagem: "cepsa-gas-propano.jpg", stock: true }
+  ],
+  prio: [
+    { nome: "Gás Propano 11kg", preco: "25,50 €", descricao: "Propano PRIO 11kg.", imagem: "garrafa-gas-prio.jpg", stock: true },
+    { nome: "Gás Propano 45kg", preco: "120 €", descricao: "Propano PRIO 45kg.", imagem: "garrafa-gas-prio-2.jpg", stock: true }
+  ],
+  galp: [
+    { nome: "Gás Butano 13kg", preco: "36,50 €", descricao: "Butano GALP 13kg.", imagem: "gas-butano-galp.png", stock: true },
+    { nome: "Gás Butano Leve 12kg", preco: "38,50 €", descricao: "Butano GALP Leve 12kg.", imagem: "pluma_12kg_nova_0.png", stock: true },
+    { nome: "Gás Propano 11kg", preco: "34,50 €", descricao: "Propano GALP 11kg.", imagem: "galp-11kg.png", stock: true },
+    { nome: "Gás Propano 45kg", preco: "129 €", descricao: "Propano GALP 45kg.", imagem: "galp-propano-45kg.jpg", stock: true }
+  ],
+  "rubis gas": [
+    { nome: "Gás Butano 13kg", preco: "34,50 €", descricao: "Butano RUBIS 13kg.", imagem: "rubis-13kg.jpg", stock: true },
+    { nome: "Gás Leve 12kg", preco: "37,50 €", descricao: "Gás leve RUBIS 12kg.", imagem: "leve-12kg.jpg", stock: true },
+    { nome: "Gás Propano 11kg", preco: "34,50 €", descricao: "Propano RUBIS 11kg.", imagem: "rubis_propano_ft.png", stock: true }
+  ],
+  repsol: [
+    { nome: "Gás Butano Leve 6kg", preco: "27,50 €", descricao: "Butano leve REPSOL 6kg.", imagem: "repsol-k6.jpg", stock: true },
+    { nome: "Gás Butano Leve 11kg", preco: "38,50 €", descricao: "Butano leve REPSOL 11kg.", imagem: "repsol-k11.jpg", stock: true },
+    { nome: "Gás Butano 12kg", preco: "26,50 €", descricao: "Butano REPSOL 12kg.", imagem: "image.png", stock: true },
+    { nome: "Gás Butano 13kg", preco: "36,50 €", descricao: "Butano REPSOL 13kg.", imagem: " butano-repsol.png", stock: true },
+    { nome: "Gás Propano 11kg", preco: "36,50 €", descricao: "Propano REPSOL 11kg.", imagem: "Butano_12_5-5.png", stock: true }
+  ],
+  ozenergia: [
+    { nome: "Gás Butano 13kg", preco: "34,50 €", descricao: "Butano OZenergia 13kg.", imagem: "butano_13.png", stock: true },
+    { nome: "Gás Propano 11kg", preco: "34,50 €", descricao: "Propano OZenergia 11kg.", imagem: "Gas_11Kg.propano.jpg", stock: true }
+  ],
+  tutigas: [
+    { nome: "Gás Butano 13kg", preco: "33,50 €", descricao: "Butano Tutigas 13kg.", imagem: "Garrafa-13kg.jpg", stock: true },
+    { nome: "Gás Propano 11kg", preco: "25,50 €", descricao: "Propano Tutigas 11kg.", imagem: "Garrafa-11kg.jpg", stock: false },
+    { nome: "Gás Propano 45kg", preco: "130 €", descricao: "Propano Tutigas 45kg.", imagem: "Garrafa-45kg.jpg", stock: false }
+  ]
+};
+
+
+    const normalizar = str =>
+      str
+        ?.toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9\-]/g, "");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const marcaQuery = normalizar(urlParams.get("marca") || "");
+
+    const title = document.getElementById("marca-title");
+    const container = document.getElementById("product-container");
+
+    const marcaReal = Object.keys(produtos).find(key => normalizar(key) === marcaQuery);
+
+    if (marcaReal) {
+      const nomeFormatado = marcaReal.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      title.innerText = `Produtos da marca: ${nomeFormatado}`;
+      produtos[marcaReal].forEach(produto => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <span class="tag">Novidade</span>
+          <img src="${produto.imagem}" alt="${produto.nome}" />
+          <h3>${produto.nome}</h3>
+          <p>${produto.descricao}</p>
+          <p class="stock">${produto.stock ? "✔ Em stock" : "✖ Sem stock"}</p>
+          <p class="price">${produto.preco}</p>
+          <button class="buy-button" ${produto.stock ? "" : "disabled"}>Comprar</button>
+        `;
+        card.querySelector(".buy-button").addEventListener("click", () => {
+          alert(`Obrigado por comprar para encomenda 934819647: ${produto.nome} por ${produto.preco}`);
+        });
+        container.appendChild(card);
+      });
+    } else {
+      title.innerText = "Marca não encontrada.";
+    }
+  </script>
+</body>
+</html>
